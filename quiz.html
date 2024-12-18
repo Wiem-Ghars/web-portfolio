@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time for a Quiz</title>
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <a href="#" class="logo">ฬเє๓</a>  
+        
+        <nav>
+            <a href="index.html" >Home</a>
+            <a href="Education.html" >Education</a>
+            <a href="skills.html" >Skills</a>
+            <a href="experience.html">Experience & Projects</a>
+            <a href="extracurricularAct.html">Participation</a>
+
+            <a href="aboutMe.html">About Me</a>
+            <a href="quiz.html" class="active">Quiz</a>
+            <a href="testimony.html">Testimony</a>
+            <a href="contact.html">Contact</a>
+            
+
+        </nav> 
+    </header>
+    <section>
+        <div class="quiz-container">
+            <h1>Asian Culture Quiz</h1>
+            <div id="quiz-question" class="question-container"></div>
+
+            <div class="button-container">
+                <button id="prev-btn" onclick="prevQuestion()" disabled>Previous</button>
+                <button id="next-btn" onclick="nextQuestion()">Next</button>
+                <button id="submit-btn" onclick="submitQuiz()" style="display: none;">Submit</button>
+            </div>
+
+            <div id="result" class="result-container" style="display: none;">
+                <h2>Your Results</h2>
+                <div id="score"></div>
+                <div id="answers"></div>
+                <button id="retake-btn" onclick="retakeQuiz()">Retake Quiz</button>
+
+            </div>
+        </div>
+        <footer>© Copyright 2024 Wiem Ghars</footer>
+    </section>
+    
+    <script>
+        
+        // Quiz Questions
+        const questions = [
+            {
+                question: "What is the name of the ancient Chinese philosophical concept that emphasizes balance and harmony between opposing forces?",
+                options: ["Confucianism", "Taoism", "Yin and Yang","Legalism"],
+                correct: "Yin and Yang"
+            },
+            {
+                question: "What is the longest river in Asia?",
+                options: ["Yellow River", "Mekong River", "Yangtze River","Pearl River"],
+                correct: "Yangtze River",
+                image: "./images/quiz/river.jpg"
+            },
+            {
+                question: "Which of the following is a UNESCO World Heritage Site in Thailand?",
+                options: ["Sukhothai Historical Park", "Ayutthaya Elephant Village", "Wat Arun","Khao San Road"],
+                correct: "Sukhothai Historical Park",
+                image: "./images/quiz/sukhothai.jpg"
+            },
+            {
+                question: "Where is this famous monument located?",
+                options: ["Thailand", "Malysia", "Japan","North korea"],
+                correct: "Japan",
+                image: "./images/quiz/Hiroshima.jpg"
+            },
+            {
+                question: "Which Korean dynasty ruled for over 500 years and is considered one of the longest-reigning dynasties in the world?",
+                options: ["Goryeo", "Silla", "Baekje","Joseon"],
+                correct: "Joseon",
+                image: "./images/quiz/joseon-dynasty.jpg"
+            },
+            {
+                question: "Which country is known as the Land of the Rising Sun?",
+                options: ["China", "Japan", "Thailand","Sri lanka"],
+                correct: "Japan"
+            },
+            {
+                question: "Which Korean palace, known for its stunning architecture and historical significance, was originally built in 1395 and served as the main royal palace of the Joseon Dynasty?",
+                options: ["Changgyeonggung Palace", "Gyeongbokgung Palace", "Changdeokgung Palace","Deoksugung Palace"],
+                correct: "Gyeongbokgung Palace",
+                image: "./images/quiz/gyeongbokgung-palace.jpg"
+            },
+            {
+                question: "Which mountain is considered sacred in Japan?",
+                options: ["Mount Everest", "Mount Fuji", "Mount Kinabalu"],
+                correct: "Mount Fuji",
+                image: "./images/quiz/fuji.jpg"
+            },
+            {
+                question: "Which Chinese festival is also known as the Spring Festival?",
+                options: ["Dragon Boat Festival", "Mid-Autumn Festival", "Chinese New Year"],
+                correct: "Chinese New Year",
+                image:"./images/quiz/new-year.jpg"
+            },
+            {
+                question: "What is the Thai New Year festival, known for its water fights?",
+                options: ["Loy Krathong", "Visakha Bucha", "Songkran","Chakri Day"],
+                correct: "Songkran",
+                image: "./images/quiz/water-fes.jpg"
+            },
+
+            {
+                question: "What is the Japanese name for the Emperor’s residence in Tokyo?",
+                options: ["Osaka Castle", "Kyoto Palace", "Imperial Palace","Himeji Castle"],
+                correct: "Imperial Palace",
+                image: "./images/quiz/Tokyo-Imperial-Palace.jpg"
+            },
+            {
+                question: "Which Philippine island is known for being the site of the first battle of the Philippine-American War in 1899?",
+                options: ["Luzon", "Mindanao", "Cebu","Balintawak"],
+                correct: "Luzon"
+            },
+
+
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = [];
+
+        function displayQuestion(index) {
+                    const questionContainer = document.getElementById("quiz-question");
+                    const question = questions[index];
+                    questionContainer.innerHTML = `
+                        <p>${index + 1}. ${question.question}</p>
+                        ${
+                            question.image
+                                ? `<img src="${question.image}" alt="Question Image" style="max-width: 100%; height: auto; margin-bottom: 10px;" />`
+                                : ""
+                        }
+                        ${question.options
+                            .map(
+                                (option, i) => `
+                            <label>
+                                <input type="radio" name="q${index}" value="${option}" ${
+                                    userAnswers[index] === option ? "checked" : ""
+                                } />
+                                ${option}
+                            </label>
+                            <br/>
+                        `
+                            )
+                            .join("")}
+                    `;
+
+                    document.getElementById("prev-btn").disabled = index === 0;
+                    document.getElementById("next-btn").style.display =
+                        index === questions.length - 1 ? "none" : "inline-block";
+                    document.getElementById("submit-btn").style.display =
+                        index === questions.length - 1 ? "inline-block" : "none";
+                }
+
+        function nextQuestion() {
+            saveAnswer(currentQuestion);
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                displayQuestion(currentQuestion);
+            }
+        }
+
+        function prevQuestion() {
+            saveAnswer(currentQuestion);
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                displayQuestion(currentQuestion);
+            }
+        }
+
+        function saveAnswer(index) {
+            const selectedOption = document.querySelector(
+                `input[name="q${index}"]:checked`
+            );
+            userAnswers[index] = selectedOption ? selectedOption.value : null;
+            console.log(userAnswers); 
+        }
+
+        function submitQuiz() {
+            saveAnswer(currentQuestion);
+
+            const resultContainer = document.getElementById("result");
+            const scoreContainer = document.getElementById("score");
+            const answersContainer = document.getElementById("answers");
+
+            let score = 0;
+            const answerDetails = questions
+                .map((question, i) => {
+                    const userAnswer = userAnswers[i];
+                    const correctAnswer = question.correct;
+                    if (userAnswer === correctAnswer) {
+                        score++;
+                    }
+                    return `
+                        <p>
+                            <strong>${i + 1}. ${question.question}</strong><br/>
+                            Your Answer: ${userAnswer || "No Answer"}<br/>
+                            Correct Answer: ${correctAnswer}
+                        </p>
+                    `;
+                })
+                .join("");
+
+            scoreContainer.innerHTML = `<h3>Your Score: ${score} / ${questions.length}</h3>`;
+            answersContainer.innerHTML = answerDetails;
+
+            resultContainer.style.display = "block";
+
+            document.getElementById("quiz-question").style.display = "none";
+            document.querySelector(".button-container").style.display = "none";
+        }
+
+        displayQuestion(currentQuestion);
+        function retakeQuiz() {
+
+            currentQuestion = 0;
+            userAnswers = [];
+
+            document.getElementById("result").style.display = "none";
+           
+            document.getElementById("quiz-question").style.display = "block";
+            document.querySelector(".button-container").style.display = "flex";
+
+            displayQuestion(currentQuestion);
+        }
+
+    </script>
+
+
+</body>
+</html>

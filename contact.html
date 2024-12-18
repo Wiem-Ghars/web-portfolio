@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Me</title>
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <a href="#" class="logo">ฬเє๓</a>  
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="Education.html">Education</a>
+            <a href="skills.html">Skills</a>
+            <a href="experience.html">Experience & Projects</a>
+            <a href="extracurricularAct.html">Participation</a>
+            <a href="aboutMe.html">About Me</a>
+            <a href="quiz.html">Quiz</a>
+            <a href="testimony.html">Testimony</a>
+            <a href="contact.html" class="active">Contact</a>
+        </nav> 
+    </header>
+    
+    <div class="contact-container">
+        <form class="contact-left" id="contact-form">
+            <div class="contact-left-title">
+                <h2>Get in touch</h2><hr>
+            </div>
+            <input type="text" id="name" placeholder="Your Name" class="contact-inputs" required>
+            <input type="email" id="email" placeholder="Your email" class="contact-inputs" required>
+            <input type="text" id="subject" placeholder="Subject" class="contact-inputs" required>
+            <textarea id="message" placeholder="Your message" class="contact-inputs" required></textarea>
+            <button type="button" onclick="sendEmail()">Send</button>
+        </form>
+        
+        <div class="contact-right">
+            <img src="./images/contactDesign2.png" alt="">
+        </div>
+  
+        <div id="success-alert" class="successAlert" >
+            <h4 style="margin-bottom: 10px;">Well done!</h4>
+            <p>Your message has been sent successfully.</p>
+            <hr>
+            <p class="mb-0">We'll get back to you as soon as possible.</p>
+        </div>
+    </div>
+
+    <script>
+        function sendEmail() {
+            var name = document.getElementById('name').value;
+            var email = document.getElementById('email').value;
+            var subject = document.getElementById('subject').value;
+            var message = document.getElementById('message').value;
+
+            var mailtoLink = 'mailto:ghars.wiem4@gmail.com' +
+                '?subject=' + encodeURIComponent(subject) +
+                '&body=' + encodeURIComponent("Name: " + name + "\nEmail: " + email + "\n\nMessage: " + message);
+
+            window.location.href = mailtoLink;
+            document.getElementById('contact-form').reset();
+
+            showSuccessAlert();
+        }
+        function showSuccessAlert() {
+            var successAlert = document.getElementById('success-alert');
+            successAlert.style.display = 'block';
+
+            setTimeout(function() {
+                successAlert.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+    <footer>© Copyright 2024 Wiem Ghars</footer>
+</body>
+</html>
